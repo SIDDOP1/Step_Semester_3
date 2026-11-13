@@ -1,4 +1,4 @@
-import java.time.*;import java.util.*;
+import java.time.*;import java.time.temporal.ChronoUnit;import java.util.*;
 abstract class Room {String id;double rate;Room(String i,double r){id=i;rate=r;}double calculatePrice(LocalDate s,LocalDate e){long n=ChronoUnit.DAYS.between(s,e);if(n<=0)throw new IllegalArgumentException();return n*rate;}}
 class StandardRoom extends Room {StandardRoom(String i){super(i,100);}}
 class DeluxeRoom extends Room {DeluxeRoom(String i){super(i,160);}}

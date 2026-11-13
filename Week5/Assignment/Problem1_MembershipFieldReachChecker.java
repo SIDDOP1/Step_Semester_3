@@ -15,7 +15,7 @@ public class Problem1_MembershipFieldReachChecker {
         switch (fieldModifier) {
             case "private": return "DENIED";
             case "default": return samePackage ? "ALLOWED" : "DENIED";
-            case "protected": return (samePackage || differentPackage) ? "ALLOWED" : "DENIED";
+            case "protected": return samePackage ? "ALLOWED" : "DENIED";
             case "public": return "ALLOWED";
             default: return "DENIED";
         }

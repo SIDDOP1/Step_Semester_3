@@ -1,0 +1,8 @@
+import java.time.*; 
+interface LatePenalty {double apply(double marks,long daysLate);}
+class CodingAssignment implements LatePenalty {public double apply(double m,long d){return Math.max(0,m*(1-0.10*d));}}
+class WrittenAssignment implements LatePenalty {public double apply(double m,long d){return Math.max(0,m*(1-0.20*d));}}
+class Student {String name;Student(String n){name=n;}}
+class Assignment {String title;LocalDate due;double max;LatePenalty penalty;Assignment(String t,LocalDate d,double m,LatePenalty p){title=t;due=d;max=m;penalty=p;}}
+class Submission {enum Status{SUBMITTED,GRADED}private Status status=Status.SUBMITTED;Student student;Assignment assignment;LocalDate submitted;double finalMarks;Submission(Student s,Assignment a,LocalDate d){student=s;assignment=a;submitted=d;}void grade(double marks){if(status!=Status.SUBMITTED)throw new IllegalStateException("Already graded");if(marks<0||marks>assignment.max)throw new IllegalArgumentException();long days=Math.max(0,ChronoUnit.DAYS.between(assignment.due,submitted));finalMarks=assignment.penalty.apply(marks,days);status=Status.GRADED;}Status getStatus(){return status;}boolean canResubmit(){return status!=Status.GRADED;}}
+public class Problem2_AssignmentSubmissionPortal {public static void main(String[]x){Assignment a=new Assignment("Linked List Lab",LocalDate.of(2026,3,10),50,new CodingAssignment());Submission s=new Submission(new Student("Asha"),a,LocalDate.of(2026,3,10));s.grade(45);System.out.println("Asha graded: "+s.finalMarks+"/50. Status: "+s.getStatus());}}

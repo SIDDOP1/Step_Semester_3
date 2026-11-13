@@ -1,0 +1,6 @@
+abstract class Vehicle {String id;private boolean available=true;Vehicle(String id){this.id=id;}abstract double dailyRate();boolean rent(){if(!available)return false;available=false;return true;}void returned(){available=true;}double charge(int days){if(days<=0)throw new IllegalArgumentException();return dailyRate()*days;}boolean isAvailable(){return available;}}
+class Sedan extends Vehicle {Sedan(String id){super(id);}double dailyRate(){return 50;}}
+class SUV extends Vehicle {SUV(String id){super(id);}double dailyRate(){return 80;}}
+class Truck extends Vehicle {Truck(String id){super(id);}double dailyRate(){return 120;}}
+class Rental {String customer;Vehicle vehicle;int days;Rental(String c,Vehicle v,int d){if(!v.rent())throw new IllegalStateException(v.id+" is currently unavailable");customer=c;vehicle=v;days=d;}double amount(){return vehicle.charge(days);}void returnVehicle(){vehicle.returned();}}
+public class Problem1_VehicleRentalSystem {public static void main(String[]x){Vehicle s=new Sedan("Sedan A");Rental r=new Rental("Customer 1",s,3);System.out.println("Rental charge: "+r.amount());try{new Rental("Customer 2",s,2);}catch(Exception e){System.out.println(e.getMessage());}r.returnVehicle();}}

@@ -11,4 +11,4 @@ javac Week6/Assignment/Problem1_GymMembershipFoundation.java
 java -cp Week6/Assignment Problem1_GymMembershipFoundation
 ```
 
-Use Java 8+. Some PDFs describe member-number display as a formatted ID while also showing a numeric field; getters expose the numeric sequence and the source examples are demonstrated in each main method where practical.
+Use Java 11 or newer. Some PDFs describe member-number display as a formatted ID while also showing a numeric field; getters expose the numeric sequence and the source examples are demonstrated in each main method where practical.

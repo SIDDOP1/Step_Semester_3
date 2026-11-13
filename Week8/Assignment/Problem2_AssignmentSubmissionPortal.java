@@ -1,4 +1,5 @@
-import java.time.*; 
+import java.time.*;
+import java.time.temporal.ChronoUnit; 
 interface LatePenalty {double apply(double marks,long daysLate);}
 class CodingAssignment implements LatePenalty {public double apply(double m,long d){return Math.max(0,m*(1-0.10*d));}}
 class WrittenAssignment implements LatePenalty {public double apply(double m,long d){return Math.max(0,m*(1-0.20*d));}}

@@ -1,4 +1,5 @@
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 interface LeavePolicy {boolean eligible(long days);}
 class FullTimePolicy implements LeavePolicy {public boolean eligible(long d){return d>0&&d<=30;}}
 class PartTimePolicy implements LeavePolicy {public boolean eligible(long d){return d>0&&d<=10;}}

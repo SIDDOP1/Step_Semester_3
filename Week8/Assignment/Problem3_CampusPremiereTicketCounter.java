@@ -1,0 +1,10 @@
+import java.util.*;
+interface SeatCategory {double price();}
+class RegularSeat implements SeatCategory {public double price(){return 150;}}
+class PremiumSeat implements SeatCategory {public double price(){return 250;}}
+class ReclinerSeat implements SeatCategory {public double price(){return 400;}}
+class Seat {String id;SeatCategory category;Seat(String i,SeatCategory c){id=i;category=c;}}
+class Customer {String name;Customer(String n){name=n;}}
+class Show {String name;java.time.LocalDateTime starts;Map<String,Seat> seats=new HashMap<>();Set<String> booked=new HashSet<>();Show(String n,java.time.LocalDateTime s){name=n;starts=s;}boolean available(String id){return seats.containsKey(id)&&!booked.contains(id);}}
+class Booking {Customer customer;Show show;List<Seat> seats;boolean cancelled;Booking(Customer c,Show s,List<Seat> seats){customer=c;show=s;this.seats=seats;}double total(){return seats.stream().mapToDouble(a->a.category.price()).sum();}boolean cancel(java.time.LocalDateTime now){if(cancelled||!now.isBefore(show.starts))return false;for(Seat s:seats)show.booked.remove(s.id);cancelled=true;return true;}}
+public class Problem3_CampusPremiereTicketCounter {static Booking book(Customer c,Show s,List<String> ids){if(ids.isEmpty()||ids.size()>6)throw new IllegalArgumentException("Booking must contain 1 to 6 seats");List<Seat> chosen=new ArrayList<>();for(String id:ids){Seat seat=s.seats.get(id);if(seat==null||!s.available(id))throw new IllegalStateException("Seat "+id+" is already booked for this show.");chosen.add(seat);}for(Seat seat:chosen)s.booked.add(seat.id);return new Booking(c,s,chosen);}public static void main(String[]x){Show s=new Show("7 PM",java.time.LocalDateTime.now().plusHours(3));s.seats.put("A1",new Seat("A1",new RegularSeat()));s.seats.put("A2",new Seat("A2",new RegularSeat()));s.seats.put("F5",new Seat("F5",new PremiumSeat()));Booking b=book(new Customer("Asha"),s,Arrays.asList("A1","A2","F5"));System.out.printf("Total: ₹%.2f%n",b.total());}}

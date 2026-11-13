@@ -1,0 +1,8 @@
+import java.util.*;
+interface PaymentMethod {boolean processPayment(double amount);}
+class CreditCardPayment implements PaymentMethod {public boolean processPayment(double a){return a>0;}}
+class PayPalPayment implements PaymentMethod {public boolean processPayment(double a){return false;}}
+class BankTransferPayment implements PaymentMethod {public boolean processPayment(double a){return a>0;}}
+class Product {String name;double price;Product(String n,double p){name=n;price=p;}}
+class Order {String id;Map<Product,Integer> items=new LinkedHashMap<>();enum Status{PENDING,PAID}private Status status=Status.PENDING;Order(String id){this.id=id;}void add(Product p,int q){if(q<=0)throw new IllegalArgumentException();items.put(p,items.getOrDefault(p,0)+q);}double total(){return items.entrySet().stream().mapToDouble(e->e.getKey().price*e.getValue()).sum();}boolean pay(PaymentMethod m){if(items.isEmpty())throw new IllegalStateException("Cannot process payment for an empty order.");if(status==Status.PAID)return false;boolean ok=m.processPayment(total());if(ok)status=Status.PAID;return ok;}Status status(){return status;}}
+public class Problem5_ShoppingPaymentProcessing {public static void main(String[]x){Order o=new Order("X");o.add(new Product("A",10),2);o.add(new Product("B",5),1);System.out.println(o.pay(new CreditCardPayment()));System.out.println(o.status());Order z=new Order("Z");z.add(new Product("C",8),1);System.out.println(z.pay(new PayPalPayment()));System.out.println(z.status());}}

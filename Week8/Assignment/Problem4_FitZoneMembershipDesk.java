@@ -1,0 +1,7 @@
+interface MembershipPlan {int months();double discount();String name();default double calculateFee(){return 1000*months()*(1-discount());}}
+class MonthlyPlan implements MembershipPlan {public int months(){return 1;}public double discount(){return 0;}public String name(){return "Monthly";}}
+class QuarterlyPlan implements MembershipPlan {public int months(){return 3;}public double discount(){return .10;}public String name(){return "Quarterly";}}
+class AnnualPlan implements MembershipPlan {public int months(){return 12;}public double discount(){return .25;}public String name(){return "Annual";}}
+class Member {String name;Membership membership;Member(String n){name=n;}}
+class Membership {enum Status{ACTIVE,FROZEN,EXPIRED}private Status status=Status.ACTIVE;private MembershipPlan plan;Membership(MembershipPlan p){plan=p;}Status status(){return status;}void freeze(){if(status!=Status.ACTIVE)throw new IllegalStateException("Cannot freeze "+status);status=Status.FROZEN;}void unfreeze(){if(status!=Status.FROZEN)throw new IllegalStateException("Cannot unfreeze "+status);status=Status.ACTIVE;}void expire(){status=Status.EXPIRED;}boolean checkIn(){return status==Status.ACTIVE;}double fee(){return plan.calculateFee();}}
+public class Problem4_FitZoneMembershipDesk {public static void main(String[]x){Membership a=new Membership(new QuarterlyPlan());System.out.printf("Quarterly membership fee: ₹%.2f%n",a.fee());System.out.println(a.checkIn());a.freeze();System.out.println(a.status());a.expire();}}

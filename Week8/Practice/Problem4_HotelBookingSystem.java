@@ -1,0 +1,9 @@
+import java.time.*;import java.time.temporal.ChronoUnit;import java.util.*;
+abstract class Room {String id;double rate;Room(String i,double r){id=i;rate=r;}double calculatePrice(LocalDate s,LocalDate e){long n=ChronoUnit.DAYS.between(s,e);if(n<=0)throw new IllegalArgumentException();return n*rate;}}
+class StandardRoom extends Room {StandardRoom(String i){super(i,100);}}
+class DeluxeRoom extends Room {DeluxeRoom(String i){super(i,160);}}
+class Suite extends Room {Suite(String i){super(i,250);}}
+class Customer {String name;Customer(String n){name=n;}}
+class Reservation {Customer customer;Room room;LocalDate start,end,cancelDeadline;boolean cancelled;Reservation(Customer c,Room r,LocalDate s,LocalDate e,LocalDate deadline){customer=c;room=r;start=s;end=e;cancelDeadline=deadline;}boolean overlaps(LocalDate s,LocalDate e){return !cancelled&&s.isBefore(end)&&e.isAfter(start);}boolean cancel(LocalDate now){if(cancelled||now.isAfter(cancelDeadline))return false;cancelled=true;return true;}}
+class Hotel {List<Reservation> reservations=new ArrayList<>();boolean available(Room r,LocalDate s,LocalDate e){return reservations.stream().noneMatch(x->x.room==r&&x.overlaps(s,e));}Reservation reserve(Customer c,Room r,LocalDate s,LocalDate e,LocalDate deadline){if(!available(r,s,e))throw new IllegalStateException("Room not available");Reservation v=new Reservation(c,r,s,e,deadline);reservations.add(v);return v;}}
+public class Problem4_HotelBookingSystem {public static void main(String[]x){Hotel h=new Hotel();Room r=new StandardRoom("101");LocalDate s=LocalDate.of(2026,1,1),e=LocalDate.of(2026,1,5);Reservation a=h.reserve(new Customer("A"),r,s,e,s.minusDays(1));System.out.println(a.room.calculatePrice(s,e));}}

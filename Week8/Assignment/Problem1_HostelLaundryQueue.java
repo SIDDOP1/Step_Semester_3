@@ -1,0 +1,9 @@
+import java.util.*;
+interface WashType {int duration();double charge();String name();}
+class QuickWash implements WashType {public int duration(){return 30;}public double charge(){return 20;}public String name(){return "Quick";}}
+class NormalWash implements WashType {public int duration(){return 45;}public double charge(){return 30;}public String name(){return "Normal";}}
+class HeavyWash implements WashType {public int duration(){return 60;}public double charge(){return 45;}public String name(){return "Heavy";}}
+class Student {String name;Student(String n){name=n;}}
+class WashCycle {Student student;WashingMachine machine;WashType type;WashCycle(Student s,WashingMachine m,WashType t){student=s;machine=m;type=t;}}
+class WashingMachine {private String id;private WashCycle active;WashingMachine(String id){this.id=id;}boolean isFree(){return active==null;}boolean start(Student s,WashType t){if(!isFree())return false;active=new WashCycle(s,this,t);System.out.printf("%s wash started on %s for %s (%d min). Charge: ₹%.2f%n",t.name(),id,s.name,t.duration(),t.charge());return true;}void complete(){if(active==null){System.out.println(id+" is already free.");return;}System.out.println(id+" cycle completed.");active=null;System.out.println(id+" is now free.");}}
+public class Problem1_HostelLaundryQueue {public static void main(String[]x){WashingMachine m1=new WashingMachine("M1"),m2=new WashingMachine("M2");Student a=new Student("Asha"),r=new Student("Ravi"),n=new Student("Neha");m1.start(a,new QuickWash());if(!m1.start(r,new HeavyWash()))System.out.println("Machine M1 is currently busy.");m2.start(r,new HeavyWash());m1.complete();m1.start(n,new NormalWash());}}
